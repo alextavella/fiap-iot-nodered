@@ -1,0 +1,126 @@
+[
+    {
+        "id": "b8d70fc9.ac0ab",
+        "type": "mqtt in",
+        "z": "9451b81d.252458",
+        "name": "",
+        "topic": "temperaturafiap",
+        "qos": "2",
+        "broker": "cadd55cc.aec4e8",
+        "x": 140,
+        "y": 160,
+        "wires": [
+            [
+                "66ee3c13.e0e674",
+                "9553391.238b4c8"
+            ]
+        ]
+    },
+    {
+        "id": "66ee3c13.e0e674",
+        "type": "debug",
+        "z": "9451b81d.252458",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 410,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "9553391.238b4c8",
+        "type": "json",
+        "z": "9451b81d.252458",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 290,
+        "y": 280,
+        "wires": [
+            [
+                "650ac0ad.93837"
+            ]
+        ]
+    },
+    {
+        "id": "650ac0ad.93837",
+        "type": "function",
+        "z": "9451b81d.252458",
+        "name": "Convert Temperatura",
+        "func": "context.global.temperatura = [];\ncontext.global.temperatura = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 480,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3936f512.38014a",
+        "type": "http in",
+        "z": "9451b81d.252458",
+        "name": "Temperatura",
+        "url": "/temperatura",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 460,
+        "wires": [
+            [
+                "c9cf5485.8ce2e8"
+            ]
+        ]
+    },
+    {
+        "id": "c03de8e8.99b518",
+        "type": "http response",
+        "z": "9451b81d.252458",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 590,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "c9cf5485.8ce2e8",
+        "type": "function",
+        "z": "9451b81d.252458",
+        "name": "Create Payload",
+        "func": "msg.payload = JSON.stringify({\n    temperatura: context.global.temperatura\n});\n\nmsg.headers = {\n    \"Accept\": \"application/json\",\n    \"Content-Type\": \"application/json\",\n    \"Access-Control-Allow-Origin\": \"*\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 400,
+        "y": 480,
+        "wires": [
+            [
+                "c03de8e8.99b518"
+            ]
+        ]
+    },
+    {
+        "id": "cadd55cc.aec4e8",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "",
+        "broker": "iot.eclipse.org",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": ""
+    }
+]
